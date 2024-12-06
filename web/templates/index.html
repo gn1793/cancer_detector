@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>혈액 암세포 분류</title>
+    <style>
+        /* 기본 스타일 설정 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            /* 배경 이미지 설정 */
+            background: url('../static/images/background.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            overflow: auto; 
+        }
+        .container {
+            /* 컨테이너 박스 스타일 */
+            background-color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+            max-width: 800px; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            /* 제목 스타일 */
+            font-size: 2.5rem; 
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        #dropzone {
+            /* 이미지 드롭존 스타일 */
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            width: 90%;
+        }
+        #dropzone:hover {
+            /* 드래그 중일 때 효과 */
+            border-color: #aaa;
+        }
+        #preview-container {
+            /* 미리보기 캔버스 컨테이너 */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        #preview {
+            /* 캔버스 스타일 */
+            width: 350px;
+            height: 350px;
+            display: block;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            object-fit: contain;
+        }
+        #classifyBtn {
+            /* 분류 버튼 스타일 */
+            width: 90%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+        #classifyBtn:disabled {
+            /* 버튼 비활성화 스타일 */
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #result {
+            /* 결과 표시 스타일 */
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            width: 100%;
+        }
+        .correct {
+            /* 올바른 예측 결과 스타일 */
+            color: limegreen;
+            font-size: 2.5rem; 
+            font-weight: bold;
+        }
+        .incorrect {
+            /* 틀린 예측 결과 스타일 */
+            color: red;
+            font-size: 2.5rem; 
+            font-weight: bold;
+        }
+        .result-label {
+            /* 결과 레이블 스타일 */
+            font-size: 1.8rem; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>혈액 암세포 분류</h1>
+        <div id="dropzone">
+            이미지를 드래그 앤 드롭하거나 클릭하여 선택하세요
+        </div>
+        <div id="preview-container">
+            <canvas id="preview" width="500" height="500"></canvas>
+        </div>
+        <button id="classifyBtn" disabled>분류하기</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        /* 드롭존 관련 DOM 요소 정의 */
+        const dropzone = document.getElementById('dropzone');
+        const preview = document.getElementById('preview');
+        const classifyBtn = document.getElementById('classifyBtn');
+        const result = document.getElementById('result');
+        let currentFile = null;
+
+        /* 드래그 이벤트 설정 */
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = '#007bff'; // 드래그 시 테두리 색 변경
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.borderColor = '#ccc'; // 드래그 해제 시 테두리 초기화
+        });
+
+        /* 드롭 이벤트 처리 */
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = '#ccc';
+            handleFile(e.dataTransfer.files[0]); // 파일 처리
+        });
+
+        /* 클릭으로 파일 선택 */
+        dropzone.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*'; // 이미지 파일만 허용
+            input.onchange = (e) => handleFile(e.target.files[0]);
+            input.click();
+        });
+
+        /* 파일 처리 함수 */
+        function handleFile(file) {
+            currentFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const ctx = preview.getContext('2d');
+                    ctx.clearRect(0, 0, preview.width, preview.height);
+                    
+                    // 정사각형 영역에 맞추기 위한 계산
+                    const size = Math.min(preview.width, preview.height);
+                    const scale = size / Math.max(img.width, img.height);
+                    
+                    // 중앙 배치를 위한 좌표 계산
+                    const x = (preview.width - img.width * scale) / 2;
+                    const y = (preview.height - img.height * scale) / 2;
+                    
+                    // 이미지를 비율 유지하며 중앙에 그리기
+                    ctx.drawImage(
+                        img,
+                        x, y,
+                        img.width * scale,
+                        img.height * scale
+                    );
+                };
+                img.src = e.target.result; // 이미지 데이터 로드
+            };
+            reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+            classifyBtn.disabled = false; // 분류 버튼 활성화
+        }
+
+        /* 분류 버튼 클릭 처리 */
+        classifyBtn.addEventListener('click', async () => {
+            if (!currentFile) return;
+
+            classifyBtn.disabled = true;
+            classifyBtn.textContent = '분류 중...';
+
+            const formData = new FormData();
+            formData.append('file', currentFile);
+
+            try {
+                /* 서버로 파일 전송 및 결과 처리 */
+                const response = await fetch('/api/classify', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                /* 파일 이름에서 실��� 라벨 추출 */
+                const fileName = currentFile.name.toLowerCase();
+                const numMatch = fileName.match(/img_(\d+)\.png/); 
+                let actualLabel = "Unknown";
+
+                if (numMatch) {
+                    const num = parseInt(numMatch[1], 10); 
+                    if (num >= 1 && num <= 513) {
+                        actualLabel = 'Benign'; // 양성
+                    } else if (num >= 514 && num <= 1467) {
+                        actualLabel = 'Malignant_Pre-B'; // 악성 Pre-B
+                    } else if (num >= 1471 && num <= 2257) {
+                        actualLabel = 'Malignant_Pro-B'; // 악성 Pro-B
+                    } else if (num >= 2271 && num <= 3243) {
+                        actualLabel = 'Malignant_early Pre-B'; // 초기 Pre-B
+                    }
+                }
+
+                const prediction = data.prediction; // 서버 예측 결과
+                const isCorrect = actualLabel === prediction; // 결과 비교
+
+                /* 결과 표시 */
+                result.innerHTML = `
+                    <p class="result-label">실제: ${actualLabel}</p>
+                    <p class="result-label">예측: ${prediction}</p>
+                    <p class="${isCorrect ? 'correct' : 'incorrect'}">
+                        ${isCorrect ? 'True' : 'False'}
+                    </p>
+                `;
+            } catch (error) {
+                console.error('Classification error:', error);
+                result.textContent = '분류 오류 발생';
+            }
+
+            classifyBtn.disabled = false;
+            classifyBtn.textContent = '분류하기';
+        });
+    </script>
+</body>
+</html>
