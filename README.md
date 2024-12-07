@@ -10,10 +10,10 @@ cd cancer_detector
 # 가상환경 생성
 python -m venv venv
 
-# 가상환경 활성화
-# Windows의 경우:
+가상환경 활성화
+# Windows:
 venv\Scripts\activate
-# macOS/Linux의 경우:
+macOS/Linux:
 source venv/bin/activate
 
 3. 의존성 패키지 설치
