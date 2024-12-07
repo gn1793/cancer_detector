@@ -2,9 +2,10 @@
 
 1. 프로젝트 클론
 git clone https://github.com/gn1793/cancer_detector.git
+
 cd cancer_detector
 
-2. 가상환경 생성 및 활성화
+3. 가상환경 생성 및 활성화
 # 가상환경 생성
 python -m venv venv
 
