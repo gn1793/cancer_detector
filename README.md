@@ -31,19 +31,33 @@ pip install -r requirements.txt
 ## 프로젝트 구조
 
 cancer_detector/
+
 ├── models/
+
 │   └── blood_cell_net.py    
+
 ├── web/
+
 │   ├── model.py           
+
 │   ├── page.py           
+
 │   └── templates/
+
 │       └── index.html
+
 ├── datasets/
+
 │   ├── train/
+
 │   ├── val/
+
 │   └── test/
+
 ├── checkpoints/
+
 │   └── best_model.pth
+
 └── requirements.txt
 
 
