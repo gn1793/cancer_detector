@@ -1,6 +1,7 @@
 ## 설치 방법
 
 1. 프로젝트 클론
+   
 git clone https://github.com/gn1793/cancer_detector.git
 
 cd cancer_detector
@@ -31,17 +32,21 @@ pip install -r requirements.txt
 cancer_detector/
 ├── models/
 │   └── blood_cell_net.py    
+│
 ├── web/
 │   ├── model.py           
 │   ├── page.py           
 │   └── templates/
 │       └── index.html
+│
 ├── datasets/
 │   ├── train/
 │   ├── val/
 │   └── test/
+│
 ├── checkpoints/
 │   └── best_model.pth
+│
 └── requirements.txt
 
 ## 실행 방법
