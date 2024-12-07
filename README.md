@@ -7,7 +7,7 @@
    cd cancer_detector
 
 2. 가상환경 생성 및 활성화
-가상환경 생성
+## 가상환경 생성
 python -m venv venv
 
 가상환경 활성화
