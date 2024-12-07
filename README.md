@@ -6,8 +6,8 @@ git clone https://github.com/gn1793/cancer_detector.git
 
 cd cancer_detector
 
-3. 가상환경 생성 및 활성화
-# 가상환경 생성
+2. 가상환경 생성 및 활성화
+가상환경 생성
 python -m venv venv
 
 가상환경 활성화
@@ -31,10 +31,6 @@ pip install -r requirements.txt
 ## 프로젝트 구조
 
 ![image](https://github.com/user-attachments/assets/2e9a5955-45ff-4fd0-a740-936c83f7edab)
-
-
-
-
 ## 실행 방법
 
 1. 모델 학습:
