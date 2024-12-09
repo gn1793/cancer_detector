@@ -26,7 +26,9 @@ pip install -r requirements.txt
    - 체크포인트 : https://drive.google.com/drive/folders/1K_hjwTKzeZ2MgQD3eQVjTfz09BF173zy?usp=drive_link
    
    전처리된 데이터셋을 다운로드 받은 후, 프로젝트의 datasets 폴더 안에 train, val, test 폴더를 각각 위치시켜주세요.
+   
    체크포인트 파일(best_model.pth)을 다운로드 받은 후, pgd의 checkpoints 폴더 안에 위치시켜주세요.
+   
    최종적으로 프로젝트 구조와 동일하게 위치시켜주세요.
 
 ## 프로젝트 구조
