@@ -33,8 +33,7 @@ pip install -r requirements.txt
 
 ![image](https://github.com/user-attachments/assets/2e9a5955-45ff-4fd0-a740-936c83f7edab)
 
-
-## 프로젝트 구조
+```
 cancer_detector/
 ├── models/
 │   └── blood_cell_net.py    
@@ -50,7 +49,7 @@ cancer_detector/
 ├── checkpoints/
 │   └── best_model.pth
 └── requirements.txt
-
+```
 
 # 실행 방법
 
