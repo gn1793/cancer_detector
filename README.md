@@ -30,9 +30,6 @@ pip install -r requirements.txt
    최종적으로 프로젝트 구조와 동일하게 위치시켜주세요.
 
 ## 프로젝트 구조
-
-![image](https://github.com/user-attachments/assets/2e9a5955-45ff-4fd0-a740-936c83f7edab)
-
 ```
 cancer_detector/
 ├── models/
