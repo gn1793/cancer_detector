@@ -30,6 +30,13 @@ pip install -r requirements.txt
    체크포인트 파일(best_model.pth)을 다운로드 받은 후, pgd의 checkpoints 폴더 안에 위치시켜주세요.
    
    최종적으로 프로젝트 구조와 동일하게 위치시켜주세요.
+## 데이터셋 구조
+```
+0 : Benign
+1 : Malignant_Pre-B
+2 : Malignant_Pro-B
+3 : Malignant_early Pre-B
+```
 
 ## 프로젝트 구조
 ```
@@ -49,7 +56,6 @@ cancer_detector/
 │   └── best_model.pth
 └── requirements.txt
 ```
-
 # 실행 방법
 
 ## 1. 모델 학습:
