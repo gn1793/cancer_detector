@@ -63,3 +63,6 @@ python -m models.blood_cell_net
 
 ## 2. 웹 서버 실행:
 python -m web.page
+
+## 3. 웹 서버 이용:
+``` datasets/test의 데이터를 이용해 웹 실행 ```
